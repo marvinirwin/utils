@@ -1,0 +1,1 @@
+Break down the following task in the smallest possible steps for someone with an executive function disorder: I want to set a timer for 20 minutes and make a carrd page for my friends website using the content on their google docs formatted in a JSON array where the elements are strings representing each step
