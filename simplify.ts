@@ -1,15 +1,30 @@
-import {getChatGPTResult} from "./lib.js";
+import {getChatGPTResult, getChunkedChatGPTResults} from "./lib.js";
+import path from 'path';
+import fs from 'fs';
 
-export const simplifyHskLevel = async (text: string, level: string) => {
-    const result = await getChatGPTResult(`Please make the following Chinese text use as much grammar and vocabulary from HSK level ${level}.  
-    Don't simplify the characters of any names, and also return a list of all characters by HSK level.  Return all results in JSON format,
-    ${text}
-    `);
+const level = 'HSK3';
 
-    return JSON.parse(result.data.choices[0] as string);
-}
 
-const text = process.argv[2];
-const level = process.argv[3];
-
-simplifyHskLevel(text, level).then(result => console.log(result))
+const inputDir = process.argv[2];
+console.log(`simplifying ${inputDir}`);
+(
+    async () => {
+        const txtFiles = await fs.promises.readdir(inputDir);
+        for (const file of txtFiles) {
+            if (path.extname(file) === '.txt') {
+                const inputPath = path.join(inputDir, file);
+                const text = await fs.promises.readFile(inputPath, 'utf8');
+                const outputPath = path.join(inputDir, path.parse(file).name + '.json');
+                if (fs.existsSync(outputPath)) {
+                    continue;
+                }
+                const results = await getChunkedChatGPTResults(
+                    `Please make the following Chinese text use as much grammar and vocabulary from HSK level ${level}.  Don't simplify the characters of any names.`,
+                    text,
+                    0.5
+                ); // assuming this function returns a Promise
+                await fs.promises.writeFile(outputPath, JSON.stringify(results, null, '\t'));
+            }
+        }
+    }
+)();
