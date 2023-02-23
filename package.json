@@ -21,6 +21,8 @@
   "homepage": "https://github.com/marvinirwin/utils#readme",
   "dependencies": {
     "dotenv": "^16.0.3",
+    "gpt-3-encoder": "^1.1.4",
+    "lodash": "^4.17.21",
     "node-fetch": "^3.3.0",
     "node-notifier": "^10.0.1",
     "openai": "^3.1.0",
