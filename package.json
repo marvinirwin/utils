@@ -7,7 +7,8 @@
   "scripts": {
     "eval": "ts-node eval.ts",
     "narrate": "ts-node narrate.ts",
-    "simplify": "ts-node simplify.ts"
+    "simplify": "ts-node simplify.ts",
+    "chunkSubtitles": "ts-node chumkSubtitles.ts"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/marvinirwin/utils#readme",
   "dependencies": {
+    "chatgpt": "^5.0.10",
     "dotenv": "^16.0.3",
     "gpt-3-encoder": "^1.1.4",
     "lodash": "^4.17.21",

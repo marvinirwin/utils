@@ -12,16 +12,15 @@ const openai = new OpenAIApi(configuration);
 
 const maxTokens = 4096;
 const conservativeMaxTokens = 2048;
-export const getChatGPTResult = async (prompt: string) => {
+export const getChatGPTResult = async (prompt: string): Promise<string> => {
     const length = encode(prompt).length;
-    console.log(length)
     return await openai.createCompletion({
         model: "text-davinci-003",
         prompt: prompt,
         max_tokens: maxTokens - length,
         temperature: 0.5,
     })
-        .then(response => response.data.choices[0].text)
+        .then(response => response.data.choices[0].text as string)
         .catch(e => {
             console.log(prompt.length);
             console.error(e.response.data);
