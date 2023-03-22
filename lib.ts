@@ -12,18 +12,24 @@ const openai = new OpenAIApi(configuration);
 
 const maxTokens = 4096;
 const conservativeMaxTokens = 2048;
+
+import {ChatGPTAPI} from "chatgpt";
+
+const api = new ChatGPTAPI({apiKey: process.env.OPENAI_API_KEY as string})
 export const getChatGPTResult = async (prompt: string): Promise<string> => {
-    const length = encode(prompt).length;
-    return await openai.createCompletion({
-        model: "text-davinci-003",
+    return await api.sendMessage(prompt,/*{
         prompt: prompt,
+        model: "text-davinci-003",
         max_tokens: maxTokens - length,
         temperature: 0.5,
-    })
-        .then(response => response.data.choices[0].text as string)
+    }*/)
+        .then(response => {
+            let text = response.text /*response.data.choices[0].text*/ as string;
+            return text;
+        })
         .catch(e => {
-            console.log(prompt.length);
-            console.error(e.response.data);
+            console.log(prompt);
+            console.error(e);
             throw e.response.data;
         })
 };

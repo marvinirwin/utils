@@ -8,7 +8,8 @@
     "eval": "ts-node eval.ts",
     "narrate": "ts-node narrate.ts",
     "simplify": "ts-node simplify.ts",
-    "chunkSubtitles": "ts-node chumkSubtitles.ts"
+    "chunkSubtitles": "ts-node chunkSubtitles.ts",
+    "findLongFiles": "ts-node findLongFiles.ts"
   },
   "repository": {
     "type": "git",
