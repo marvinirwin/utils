@@ -1,6 +1,8 @@
 import {config} from 'dotenv';
 import {Configuration, OpenAIApi} from "openai";
 import {encode} from 'gpt-3-encoder';
+import {ChatGPTAPI} from "chatgpt";
+import fs from "fs";
 
 
 config();
@@ -13,25 +15,45 @@ const openai = new OpenAIApi(configuration);
 const maxTokens = 4096;
 const conservativeMaxTokens = 2048;
 
-import {ChatGPTAPI} from "chatgpt";
 
-const api = new ChatGPTAPI({apiKey: process.env.OPENAI_API_KEY as string})
+const api = new ChatGPTAPI({
+    apiKey: process.env.OPENAI_API_KEY as string,
+    completionParams: { model: 'gpt-4' },
+    maxModelTokens: 8100 // not 8192 because we're leaving some buffer room
+});
+
+const cacheFile = './chatgpt-cache.json';
+const cache = fs.existsSync(cacheFile)
+    ? JSON.parse(fs.readFileSync(cacheFile, 'utf-8'))
+    : {};
+
 export const getChatGPTResult = async (prompt: string): Promise<string> => {
-    return await api.sendMessage(prompt,/*{
+    if (cache[prompt]) {
+        console.log('Cache hit');
+        return cache[prompt];
+    }
+
+    return await api
+        .sendMessage(prompt /*, {
         prompt: prompt,
         model: "text-davinci-003",
         max_tokens: maxTokens - length,
         temperature: 0.5,
     }*/)
-        .then(response => {
+        .then((response) => {
             let text = response.text /*response.data.choices[0].text*/ as string;
+
+            // Save the result in the cache and store it in a JSON file
+            cache[prompt] = text;
+            fs.writeFileSync(cacheFile, JSON.stringify(cache));
+
             return text;
         })
-        .catch(e => {
+        .catch((e) => {
             console.log(prompt);
             console.error(e);
             throw e.response.data;
-        })
+        });
 };
 
 function breakTextIntoChunks(text: string, sentenceBreakingChars: string[], maxLength: number) {

@@ -1,6 +1,15 @@
-import {getChatGPTResult} from "./lib";
+import {getChatGPTResult} from "./lib.js";
+import clipboardy from "clipboardy";
 
-const prompt = process.argv[2];
-getChatGPTResult(prompt).then((result) => {
-    console.log(result.data.choices[0].text);
-})
+
+(async () => {
+    let prompt = process.argv[2];
+    if (!prompt) {
+        console.log(`No command line prompt provided, taking one from the clipboard`)
+        prompt = await clipboardy.read();
+        console.log(prompt)
+    }
+        getChatGPTResult(prompt).then((result) => {
+            console.log(result);
+        })
+})();
