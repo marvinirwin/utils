@@ -10,7 +10,8 @@
     "discord:dev": "ts-node discord.bot",
     "chunkSubtitles": "ts-node generateSubtitleSections.ts",
     "findLongFiles": "ts-node findLongFiles.ts",
-    "ask": "ts-node ask.ts"
+    "ask": "ts-node ask.ts",
+    "modify": "ts-node applyFileModifications.ts"
   },
   "repository": {
     "type": "git",
