@@ -12,7 +12,7 @@ interface InputFile {
 
 interface Modification {
     path: string;
-    newContent: string;
+    content: string;
 }
 
 interface FileDeletion {
@@ -21,7 +21,7 @@ interface FileDeletion {
 
 interface FileCreation {
     path: string;
-    contents: string;
+    content: string;
 }
 
 interface ApiResult {
@@ -46,19 +46,25 @@ const getModifications: ProcessFilesApi = async (
 ) => {
     const result = await getChatGPTResult(
         `
-The input to this is defined as follows
+        
+You will function as a JSON api. The user will feed you valid JSON and you will return valid JSON, do not add any extra characters to the output that would make your output invalid JSON.
 
-interface  Input {
-    command: string;
-    inputFiles: InputFile[];
-}
+The end of this system message will contain typescript types named Input and Output. 
+
+If all inputs are valid then you should perform the action described in the "command" value of the input and return the result in the format described by the Output type.
+The input to this is defined as follows
 
 interface InputFile {
     path: string;
     contents: string;
 }
 
-and the output is defined as follows
+Your output, which should be 
+
+interface Modification {
+    path: string;
+    content: string;
+}
 
 interface FileDeletion {
     path: string;
@@ -66,7 +72,7 @@ interface FileDeletion {
 
 interface FileCreation {
     path: string;
-    contents: string;
+    content: string;
 }
 
 interface ApiResult {
@@ -75,7 +81,7 @@ interface ApiResult {
     creations: FileCreation[];
 }
 
-Please only reply the following prompt with the JSON representation of the above interface, parsable with JSON.parse
+Please only reply the following prompt with the JSON representation of the APIResult interface, parsable with JSON.parse
 
 ${JSON.stringify({command, inputFiles})}
         `
@@ -119,11 +125,11 @@ async function applyModifications() {
     });
     for (let i = 0; i < modifications.modifications.length; i++) {
         const modification = modifications.modifications[i];
-        await fs.writeFile(modification.path, modification.newContent);
+        await fs.writeFile(modification.path, modification.content);
     }
     for (let i = 0; i < modifications.creations.length; i++) {
         const creation = modifications.creations[i];
-        await fs.writeFile(creation.path, creation.contents);
+        await fs.writeFile(creation.path, creation.content);
     }
     for (let i = 0; i < modifications.deletions.length; i++) {
         const deletion = modifications.deletions[i];
