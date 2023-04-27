@@ -9,7 +9,9 @@ import clipboardy from "clipboardy";
         prompt = await clipboardy.read();
         console.log(prompt)
     }
-        getChatGPTResult(prompt).then((result) => {
+        getChatGPTResult(prompt).then(async (result) => {
             console.log(result);
+            await clipboardy.write(result)
+
         })
 })();

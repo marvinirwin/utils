@@ -29,7 +29,6 @@ const cache = fs.existsSync(cacheFile)
 
 export const getChatGPTResult = async (prompt: string): Promise<string> => {
     if (cache[prompt]) {
-        console.log('Cache hit');
         return cache[prompt];
     }
 

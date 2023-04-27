@@ -2,7 +2,7 @@ import * as readline from 'readline';
 import {Configuration, CreateCompletionResponse, OpenAIApi} from 'openai';
 import * as fs from 'fs';
 import { AxiosResponse } from 'axios';
-import {getChatGPTResult} from "./lib";
+import {getChatGPTResult} from "./lib.js";
 
 
 const promptUserForText = async (promptText: string): Promise<string> => {
@@ -24,7 +24,7 @@ const promptUserForText = async (promptText: string): Promise<string> => {
     while (true) {
         let promptIsGood;
         let promptText
-        let chatGPTResult: AxiosResponse<CreateCompletionResponse, any>;
+        let chatGPTResult
         do {
             promptText = await promptUserForText('Prompt: ');
             chatGPTResult = await getChatGPTResult(promptText);
