@@ -12,7 +12,8 @@
     "findLongFiles": "ts-node findLongFiles.ts",
     "ask": "ts-node ask.ts",
     "modify": "ts-node changeCode.ts",
-    "implement": "ts-node implement.ts"
+    "implement": "ts-node implement.ts",
+    "refactor": "ts-node refactor.ts"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,7 @@
   },
   "homepage": "https://github.com/marvinirwin/utils#readme",
   "dependencies": {
-    "chatgpt": "^5.1.3",
+    "chatgpt": "^5.2.4",
     "clipboardy": "^3.0.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",

@@ -12,6 +12,5 @@ import clipboardy from "clipboardy";
         getChatGPTResult(prompt).then(async (result) => {
             console.log(result);
             await clipboardy.write(result)
-
         })
 })();
